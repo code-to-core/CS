@@ -1,5 +1,5 @@
-/home/peter/dev/CS/packages/reactor/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
-/home/peter/dev/CS/packages/reactor/bin/Debug/reactor.pdb
-/home/peter/dev/CS/packages/reactor/bin/Debug/reactor.dll
-/home/peter/dev/CS/packages/reactor/obj/Debug/reactor.dll
-/home/peter/dev/CS/packages/reactor/obj/Debug/reactor.pdb
+/home/peter/dev/CS/assemblies/reactor/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/peter/dev/CS/assemblies/reactor/bin/Debug/reactor.pdb
+/home/peter/dev/CS/assemblies/reactor/bin/Debug/reactor.dll
+/home/peter/dev/CS/assemblies/reactor/obj/Debug/reactor.dll
+/home/peter/dev/CS/assemblies/reactor/obj/Debug/reactor.pdb
