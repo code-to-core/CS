@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C57794C0-45CD-4F8F-A7CF-783BC127B7D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>reactor</RootNamespace>
+    <AssemblyName>reactor</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Acceptor.cs" />
+    <Compile Include="AsyncAccept.cs" />
+    <Compile Include="AsyncHandler.cs" />
+    <Compile Include="AsyncOperation.cs" />
+    <Compile Include="AsyncReceive.cs" />
+    <Compile Include="AsyncResult.cs" />
+    <Compile Include="AsyncSend.cs" />
+    <Compile Include="AsyncTimer.cs" />
+    <Compile Include="AsyncWait.cs" />
+    <Compile Include="DefaultServiceHandler.cs" />
+    <Compile Include="DefaultServiceHandlerFactory.cs" />
+    <Compile Include="EventQueue.cs" />
+    <Compile Include="Reactor.cs" />
+    <Compile Include="Interfaces.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
