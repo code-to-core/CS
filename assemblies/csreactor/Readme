@@ -1,0 +1,6 @@
+very basic attempt to wrap the reactor around the .Net threadpool. Many things left to do
+
+1. Use disruptor pattern instead of event queue
+2. better memory management of buffers
+3. better socket closure management on disconnect
+4. connector

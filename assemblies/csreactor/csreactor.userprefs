@@ -1,0 +1,26 @@
+﻿<Properties StartupItem="responder/responder.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="reactor/EventQueue.cs">
+    <Files>
+      <File FileName="responder/Program.cs" Line="1" Column="1" />
+      <File FileName="responder/Responder.cs" Line="27" Column="1" />
+      <File FileName="reactor/Properties/AssemblyInfo.cs" Line="1" Column="1" />
+      <File FileName="reactor/AsyncAccept.cs" Line="20" Column="21" />
+      <File FileName="reactor/DefaultServiceHandler.cs" Line="79" Column="3" />
+      <File FileName="reactor/AsyncReceive.cs" Line="9" Column="23" />
+      <File FileName="reactor/AsyncOperation.cs" Line="1" Column="1" />
+      <File FileName="reactor/Acceptor.cs" Line="31" Column="1" />
+      <File FileName="reactor/AsyncRead.cs" Line="26" Column="11" />
+      <File FileName="reactor/DefaultServiceHandlerFactory.cs" Line="1" Column="1" />
+      <File FileName="reactor/EventQueue.cs" Line="56" Column="1" />
+      <File FileName="reactor/AsyncSend.cs" Line="11" Column="43" />
+      <File FileName="reactor/AsyncResult.cs" Line="1" Column="1" />
+      <File FileName="reactor/AsyncTimer.cs" Line="40" Column="1" />
+      <File FileName="reactor/AsyncWait.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
