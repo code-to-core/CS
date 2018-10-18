@@ -41,7 +41,11 @@ namespace Reactor
 		{
 
 		}
-		public virtual void handle_work(AsyncWait ar)
+		public virtual void handle_work(AsyncWork ar)
+		{
+
+		}
+		public virtual void handle_disconnect()
 		{
 
 		}

@@ -23,8 +23,19 @@ namespace Reactor
 
 		public int receive(byte [] buffer)
 		{
+			if(m_stopping)
+				return 0;
+
 			m_buffer = buffer;
-			m_ar = ((Socket)handle()).BeginReceive(m_buffer, 0, m_buffer.Length, 0, m_ReceiveCallback, this);
+			try
+			{
+				m_ar = ((Socket)handle()).BeginReceive(m_buffer, 0, m_buffer.Length, 0, m_ReceiveCallback, this);
+			}
+			catch(SocketException e)
+			{
+				cancel();
+				Console.WriteLine("Exception: {0}", e.SocketErrorCode); 
+			}
 			return 0;
 		}
 
@@ -32,8 +43,15 @@ namespace Reactor
 		{
 			m_bytes_received = ((Socket)handle()).EndReceive(ar);
 
-			// Call the handler
-			handler().handle_receive(this);
+			if(m_bytes_received == 0)
+			{
+				cancel();
+				handler().handle_disconnect();
+			}
+			else
+			{
+				handler().handle_receive(this);
+			}
 
 			m_ar = null;
 		}

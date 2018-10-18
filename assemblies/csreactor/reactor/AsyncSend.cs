@@ -23,17 +23,42 @@ namespace Reactor
 
 		public int send(byte [] buffer)
 		{
+			if(m_stopping)
+				return 0;
+
 			m_buffer = buffer;
-			m_ar = ((Socket)handle()).BeginSend(m_buffer, 0, m_buffer.Length, 0, m_sendCallback, this);
+			try 
+			{
+				m_ar = ((Socket)handle()).BeginSend(m_buffer, 0, m_buffer.Length, 0, m_sendCallback, this);
+			} 
+			catch(SocketException e)
+			{
+				cancel();
+				Console.WriteLine("Exception: {0}", e.SocketErrorCode); 
+			}
 			return 0;
 		}
 
 		public void complete(IAsyncResult ar)
 		{
-			m_bytes_sent = ((Socket)handle()).EndSend(ar);
+			try
+			{
+				m_bytes_sent = ((Socket)handle()).EndSend(ar);
 
-			// Call the handler
-			handler().handle_send(this);
+				if(m_bytes_sent != m_buffer.Length)
+				{
+					Console.WriteLine("Incomplete Send");
+				}
+
+				// Call the handler
+				handler().handle_send(this);
+			}
+			catch(SocketException e)
+			{
+				cancel();
+				Console.WriteLine("Exception: {0}", e.SocketErrorCode); 
+				handler().handle_disconnect();
+			}
 
 			m_ar = null;
 			m_buffer = null;

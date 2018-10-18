@@ -11,24 +11,44 @@ namespace Reactor
 	{
 		private Queue				m_item_queue;
 		private Queue				m_wait_queue;
+		//private bool				m_stopping;
 
 		public EventQueue()
 		{
+			//m_stopping = false;
 			m_item_queue = new Queue();
 			m_wait_queue = new Queue();
+		}
+
+		public int itemQsize()
+		{
+			return m_item_queue.Count;
+		}	
+
+		public void Shutdown()
+		{
+			lock(this)
+			{
+				//m_stopping = true;
+				m_item_queue.Clear();
+				m_wait_queue.Clear();
+			}
 		}
 
 		public void putQ(object o)
 		{
 			lock(this)
 			{
+				//if(m_stopping)
+					//return;
+
 				// Put an item on the queue. If there are any receivers waiting
 				// dispatch the item immediately. Otherwise add to the queue
 				if(m_wait_queue.Count > 0)
 				{
 					// pop off the first waiter from the wait queue
 					// and dispatch the item
-					AsyncWait op = (AsyncWait)m_wait_queue.Dequeue();
+					AsyncWork op = (AsyncWork)m_wait_queue.Dequeue();
 
 					// plug the item into the operation and post the lot 
 					// to the threadpool
@@ -41,10 +61,13 @@ namespace Reactor
 			}
 		}
 
-		public void getQ(AsyncWait op)
+		public void getQ(AsyncWork op)
 		{
 			lock(this)
 			{
+				//if(m_stopping)
+					//return;
+
 				// Retrieve an item from the queue, to avoid sequencing
 				// problems the item has to go through the completion port
 
