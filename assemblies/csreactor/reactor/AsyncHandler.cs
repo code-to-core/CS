@@ -45,7 +45,7 @@ namespace Reactor
 		{
 
 		}
-		public virtual void handle_disconnect()
+		public virtual void handle_disconnect(AsyncOperation ao)
 		{
 
 		}

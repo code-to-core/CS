@@ -6,7 +6,7 @@ namespace Reactor
 	/// <summary>
 	/// Summary description for AsyncWork.
 	/// </summary>
-	public class AsyncWork : AsyncOperation
+	public class AsyncWork : AsyncResult
 	{
 		public WaitCallback		m_waitCallback;
 
@@ -23,16 +23,6 @@ namespace Reactor
 		~AsyncWork()
 		{
 			Console.WriteLine("~AsyncWork()");
-		}
-
-		public void getWork()
-		{
-			eventQueue().getQ(this);
-		}
-
-		public EventQueue eventQueue()
-		{
-			return (EventQueue)handle();
 		}
 
 		public void complete(object o)

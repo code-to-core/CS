@@ -23,13 +23,16 @@ namespace Responder
 		{
 			
 			ep = new IPEndPoint(0, 12003);
+
 			a = new Acceptor(new DefaultServiceHandlerFactory());
+
 			a.open(ep);
 
 			a.accept();
 
 			// wait for shutdown
 			System.Threading.AutoResetEvent ev = new System.Threading.AutoResetEvent(false);
+			
 			ev.WaitOne();
 		}
 	}

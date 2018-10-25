@@ -23,6 +23,7 @@ namespace Reactor
 			((Socket)handle()).BeginAccept(handler().m_acceptCallback, this);
 			return 0;
 		}
+		
 		public iServiceHandler serviceHandler()
 		{
 			return m_serviceHandler;

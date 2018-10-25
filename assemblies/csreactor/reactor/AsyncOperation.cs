@@ -8,8 +8,6 @@ namespace Reactor
 	/// </summary>
 	public class AsyncOperation
 	{
-		protected bool m_stopping;
-
 		public AsyncOperation()
 		{
 			//
@@ -19,7 +17,6 @@ namespace Reactor
 
 		public int open(AsyncHandler handler, object handle)
 		{
-			m_stopping = false;
 			this.handler(handler);
 			m_handle = handle;
 			return 0;
@@ -27,7 +24,6 @@ namespace Reactor
 
 		public int cancel()
 		{
-			m_stopping = true;
 			return 0;
 		}
 
@@ -46,7 +42,7 @@ namespace Reactor
 			return m_handle;
 		}
 
-		protected object				m_handle;
-		private AsyncHandler			m_handler;
+		protected object		m_handle;
+		private AsyncHandler	m_handler;
 	}
 }

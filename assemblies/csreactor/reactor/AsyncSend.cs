@@ -23,9 +23,6 @@ namespace Reactor
 
 		public int send(byte [] buffer)
 		{
-			if(m_stopping)
-				return 0;
-
 			m_buffer = buffer;
 			try 
 			{
@@ -33,8 +30,8 @@ namespace Reactor
 			} 
 			catch(SocketException e)
 			{
-				cancel();
 				Console.WriteLine("Exception: {0}", e.SocketErrorCode); 
+				handler().handle_disconnect(this);
 			}
 			return 0;
 		}
@@ -55,9 +52,8 @@ namespace Reactor
 			}
 			catch(SocketException e)
 			{
-				cancel();
 				Console.WriteLine("Exception: {0}", e.SocketErrorCode); 
-				handler().handle_disconnect();
+				handler().handle_disconnect(this);
 			}
 
 			m_ar = null;

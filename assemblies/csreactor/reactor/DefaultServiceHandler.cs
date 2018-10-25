@@ -48,8 +48,8 @@ namespace Reactor
 			// Setting non-blocking mode has no effect on async calls
 			//sock.Blocking = false;
 			// Issue the first work
-			m_async_work.open(this, m_event_queue);
-			m_async_work.getWork();
+			m_async_work.open(this);
+			m_event_queue.getQ(m_async_work);
 			//m_async_work.work();
 			//m_event_queue.getQ(m_async_work);
 
@@ -61,12 +61,9 @@ namespace Reactor
 			return 0;
 		}
 
-		public override void  handle_disconnect()
+		public override void  handle_disconnect(AsyncOperation ao)
 		{
 			Console.WriteLine("Disconnect");
-
-			m_event_queue.Shutdown();
-
 		}
 
 		public override void  handle_receive(AsyncReceive ar)
@@ -106,7 +103,7 @@ namespace Reactor
 			// start a new work
 			m_async_send.send(buffer);
 			//m_async_work.work();
-			ar.eventQueue().getQ(ar);
+			m_event_queue.getQ(ar);
 		}
 
 		public override void  handle_timer(AsyncTimer ar)

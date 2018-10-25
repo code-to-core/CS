@@ -23,9 +23,6 @@ namespace Reactor
 
 		public int receive(byte [] buffer)
 		{
-			if(m_stopping)
-				return 0;
-
 			m_buffer = buffer;
 			try
 			{
@@ -41,16 +38,19 @@ namespace Reactor
 
 		public void complete(IAsyncResult ar)
 		{
-			m_bytes_received = ((Socket)handle()).EndReceive(ar);
+			try {
+				m_bytes_received = ((Socket)handle()).EndReceive(ar);
 
-			if(m_bytes_received == 0)
-			{
-				cancel();
-				handler().handle_disconnect();
-			}
-			else
-			{
-				handler().handle_receive(this);
+				if(m_bytes_received == 0)
+				{
+					handler().handle_disconnect(this);
+				}
+				else
+				{
+					handler().handle_receive(this);
+				}
+			} catch {
+				Console.WriteLine("Exception in AsyncReceive::complete()"); 
 			}
 
 			m_ar = null;
