@@ -106,8 +106,9 @@ namespace Reactor
 			m_event_queue.getQ(ar);
 		}
 
-		public override void  handle_timer(AsyncTimer ar)
+		public override void  handle_timer(object o)
 		{
+			AsyncTimer ar = (AsyncTimer)o;
 			byte [] buffer = (byte [])ar.item();
 			
 			m_async_send.send(buffer);

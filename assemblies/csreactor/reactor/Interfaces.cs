@@ -14,8 +14,8 @@ namespace Reactor
             int open(Socket sock);
 	}
 
-        public interface iServiceHandlerFactory
-        {
-            iServiceHandler makeServiceHandler();
-        }
+	public interface iServiceHandlerFactory
+	{
+		iServiceHandler makeServiceHandler();
+	}
 }

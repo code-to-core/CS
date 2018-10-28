@@ -28,7 +28,8 @@ namespace Reactor
 
 		public int open(IPEndPoint ep)
 		{
-			m_listen_sock = new Socket(ep.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+			m_listen_sock = new Socket(
+				ep.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 			m_listen_sock.Bind(ep);
 			m_listen_sock.Listen(1000);
 			return m_async_accept.open(this, m_listen_sock);

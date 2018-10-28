@@ -1,6 +1,8 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Reactor;
 
@@ -30,10 +32,22 @@ namespace Responder
 
 			a.accept();
 
+			Connector c = new Connector(new DefaultServiceHandlerFactory());
+
+			c.open(ep);
+
+			Parallel.For(1,10, i =>
+			{
+				c.connect();
+				
+			});
+
 			// wait for shutdown
-			System.Threading.AutoResetEvent ev = new System.Threading.AutoResetEvent(false);
+			//System.Threading.AutoResetEvent ev = new System.Threading.AutoResetEvent(false);
 			
-			ev.WaitOne();
+			//ev.WaitOne();
+
+			Console.ReadLine();
 		}
 	}
 }

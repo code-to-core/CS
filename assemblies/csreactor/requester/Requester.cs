@@ -1,46 +1,53 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Reactor
+namespace Responder
 {
-	/// <summary>
-	/// Summary description for AsyncAccept.
-	/// </summary>
-	public class AsyncConnect :  AsyncOperation
+	class Requester
 	{
-		public AsyncConnect()
+		static IPEndPoint ep;
+
+		[STAThread]
+		static void Main(string[] args)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
+			Parallel.For(1,5000, i =>
+			{
+				Connect();
+			});
+			Console.ReadLine();
 		}
 
-		public int connect(IPEndPoint ep)
+		private static void Connect()
 		{
+			
+			ep = new IPEndPoint(0, 12003);
+
+			Socket s = new Socket(
+				ep.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
 			SocketAsyncEventArgs e = new SocketAsyncEventArgs();
 
 			e.RemoteEndPoint = ep;
-			e.UserToken = this;
+			//e.UserToken = s;
 			e.Completed += new EventHandler<SocketAsyncEventArgs>(e_completed);
-			((Socket)handle()).ConnectAsync(e);
-			return 0;
+			s.ConnectAsync(e);
 		}
 
+		
 		private static void e_completed(object sender, SocketAsyncEventArgs e)
 		{
 			if (e.ConnectSocket != null)
 			{
 				Console.WriteLine("Connection Established : ");
-
-				AsyncConnect ac = (AsyncConnect)e.UserToken;
-				ac.handler().handle_connect(ac);
 			}
 			else
 			{
+
 				Console.WriteLine("Connection Failed");
 			}
 		}
-
 	}
 }
