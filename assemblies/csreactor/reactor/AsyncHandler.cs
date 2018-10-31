@@ -8,7 +8,6 @@ namespace Reactor
 	/// </summary>
 	public class AsyncHandler
 	{
-		public AsyncCallback					m_acceptCallback;
 		public TimerCallback					m_timerCallback;
 
 		public AsyncHandler()
@@ -16,7 +15,6 @@ namespace Reactor
 			//
 			// TODO: Add constructor logic here
 			//
-			m_acceptCallback = new AsyncCallback(this.handle_accept);
 			m_timerCallback = new TimerCallback(this.handle_timer);
 
 		}
@@ -25,7 +23,7 @@ namespace Reactor
 		{
 
 		}
-		public virtual void handle_accept(IAsyncResult ar)
+		public virtual void handle_accept(AsyncAccept ar)
 		{
 
 		}

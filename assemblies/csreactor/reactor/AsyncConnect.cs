@@ -9,21 +9,22 @@ namespace Reactor
 	/// </summary>
 	public class AsyncConnect :  AsyncOperation
 	{
+		SocketAsyncEventArgs m_args;
+
 		public AsyncConnect()
 		{
 			//
 			// TODO: Add constructor logic here
 			//
+			m_args = new SocketAsyncEventArgs();
+			m_args.UserToken = this;
+			m_args.Completed += new EventHandler<SocketAsyncEventArgs>(e_completed);
 		}
 
 		public int connect(IPEndPoint ep)
 		{
-			SocketAsyncEventArgs e = new SocketAsyncEventArgs();
-
-			e.RemoteEndPoint = ep;
-			e.UserToken = this;
-			e.Completed += new EventHandler<SocketAsyncEventArgs>(e_completed);
-			((Socket)handle()).ConnectAsync(e);
+			m_args.RemoteEndPoint = ep;
+			((Socket)handle()).ConnectAsync(m_args);
 			return 0;
 		}
 

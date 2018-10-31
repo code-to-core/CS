@@ -37,17 +37,16 @@ namespace Reactor
 
 		public int accept()
 		{
-			iServiceHandler svc = m_service_handler_strategy.makeServiceHandler();
-			return m_async_accept.accept(svc);
+			Console.WriteLine("Acceptor::Accept");
+			return m_async_accept.accept();
 		}
 
-		public override void handle_accept(IAsyncResult ar)
+		public override void handle_accept(AsyncAccept operation)
 		{
 			// retrieve the accepted socket
-			AsyncAccept operation = (AsyncAccept) ar.AsyncState;
 			Socket sock = (Socket)operation.handle();
-			Socket sock2 = sock.EndAccept(ar);
-			iServiceHandler svc = operation.serviceHandler();
+			Socket sock2 = operation.m_args.AcceptSocket;
+			iServiceHandler svc = m_service_handler_strategy.makeServiceHandler();
 			svc.open(sock2);
 
 			// start off another accept
