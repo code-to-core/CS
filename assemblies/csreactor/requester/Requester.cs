@@ -22,12 +22,12 @@ namespace Responder
 
 			c.open(ep);
 
-			//Parallel.For(1,100, i =>
-			for(int i=0; i<100; i++) 
+			Parallel.For(1,10, i =>
+			//for(int i=0; i<5000; i++) 
 			{
 				c.connect();
-			//});
-			}
+			});
+			//}
 
 			Console.ReadLine();
 		}

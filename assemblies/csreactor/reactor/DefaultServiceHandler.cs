@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Net.Sockets;
 
 
@@ -13,6 +14,7 @@ namespace Reactor
 
 		protected AsyncReceive						m_async_receive;
 		protected AsyncSend							m_async_send;
+		protected AsyncSend							m_async_init;
 
 		protected EventQueue						m_event_queue;
 		protected AsyncWork							m_async_work;
@@ -24,6 +26,7 @@ namespace Reactor
 			//
 			m_async_receive = new AsyncReceive();
 			m_async_send = new AsyncSend();
+			m_async_init = new AsyncSend();
 
 			m_event_queue = new EventQueue();
 			m_async_work = new AsyncWork();
@@ -54,10 +57,18 @@ namespace Reactor
 			//m_event_queue.getQ(m_async_work);
 
 			m_async_receive.open(this, m_sock);
+			m_async_init.open(this, m_sock);
 			m_async_send.open(this, m_sock);
 			// Begin reading bytes from the socket and echo them all back
 			byte [] buffer = new byte[128];
 			m_async_receive.receive(buffer);
+
+			
+			byte [] message = new byte[128];
+			message = Encoding.ASCII.GetBytes("hello");
+
+			m_async_init.send(message);
+
 			return 0;
 		}
 
