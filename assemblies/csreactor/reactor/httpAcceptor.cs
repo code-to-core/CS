@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace Reactor
@@ -49,13 +50,17 @@ namespace Reactor
 			while(m_run)
 			{
 				HttpListenerContext ctx = await m_http_listener.GetContextAsync();
+				string ipAddress = ctx.Request.RemoteEndPoint.Address.ToString();
 				if (ctx.Request.IsWebSocketRequest)
 				{
-					Console.WriteLine("Websocket Request");
+					Console.WriteLine("Websocket Request: IPAddress {0}", ipAddress);
+					WebSocketContext wsCtx = await ctx.AcceptWebSocketAsync(
+						subProtocol: null);
+					WebSocket ws = wsCtx.WebSocket;
 				}
 				else
 				{
-					Console.WriteLine("Http request");
+					Console.WriteLine("Http request: IPAddress {0}", ipAddress);
 					ctx.Response.StatusCode = 400;
 					ctx.Response.Close();
 				}
