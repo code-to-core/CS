@@ -39,7 +39,7 @@ namespace Reactor
 				}
 				finally
 				{
-					Thread.Sleep(1000);
+					Thread.Sleep(10);
 					//await m_connect_sock.CloseAsync();
 					m_connect_sock.Dispose();
 				}

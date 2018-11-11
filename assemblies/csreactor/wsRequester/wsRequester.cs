@@ -18,9 +18,11 @@ namespace Responder
 		{
 			uri = new string("ws://localhost:8001/demo");
 
-			wsConnector c = new wsConnector(new DefaultServiceHandlerFactory());
-
-			c.connect(uri);
+			Parallel.For(1,1000, (i) =>
+			{
+				wsConnector c = new wsConnector(new DefaultServiceHandlerFactory());
+				c.connect(uri);
+			});
 
 			Console.ReadLine();
 		}
