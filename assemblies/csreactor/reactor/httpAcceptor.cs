@@ -9,6 +9,7 @@ namespace Reactor
 	public class httpAcceptor : AsyncHandler
 	{
 		private bool						m_run;
+		private string						m_prefix;
 		private HttpListener				m_http_listener; 
 
 		private iServiceHandlerFactory		m_service_handler_strategy;
@@ -29,6 +30,7 @@ namespace Reactor
 			if(prefix == null)
 				throw new ArgumentException("prefixes");
 
+			m_prefix = new string(prefix);
 			m_http_listener = new HttpListener();
 			
 			m_http_listener.Prefixes.Add(prefix);
@@ -45,10 +47,11 @@ namespace Reactor
 		{
 		}
 
-		private async Task<bool> accept_task()
+		private async Task<bool> accept_task(int i)
 		{
 			while(m_run)
 			{
+				Console.WriteLine("Task {0} awaiting accept on {1}: ", i, m_prefix);
 				HttpListenerContext ctx = await m_http_listener.GetContextAsync();
 				string ipAddress = ctx.Request.RemoteEndPoint.Address.ToString();
 				if (ctx.Request.IsWebSocketRequest)
@@ -72,7 +75,7 @@ namespace Reactor
 		{
 			Parallel.For(1,10, async (i) =>
 			{
-				await accept_task();
+				await accept_task(i);
 			});
 
 			return 0;
