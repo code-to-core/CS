@@ -71,11 +71,6 @@ namespace Reactor
 				// Retrieve an item from the queue, to avoid sequencing
 				// problems the item has to go through the completion port
 
-				// 8/16/2006 NOT CLEAR WHY THIS IS THE CASE COMMENTS SHOULD EXPLAIN HOW 
-				// SEQUENCING PROBLEMS CAN ARISE. This will dispatch the item in the queue 
-				// on another thread from the threadpool. This does avoid a long or busy queue
-				// from permanently hogging one thread from the threadpool by having it continually
-				// draining the queue
 				if(m_item_queue.Count > 0)
 				{
 					// pop off the first item from the item queue

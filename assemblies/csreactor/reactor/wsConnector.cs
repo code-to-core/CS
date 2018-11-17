@@ -14,9 +14,9 @@ namespace Reactor
 
       Uri											m_uri;
 
-      public iServiceHandlerFactory			m_service_handler_strategy;
+      public iwsServiceHandlerFactory			m_service_handler_strategy;
 
-      public wsConnector(iServiceHandlerFactory create_strategy)
+      public wsConnector(iwsServiceHandlerFactory create_strategy)
       {
 			m_run = true;
          m_service_handler_strategy=create_strategy;
@@ -26,20 +26,26 @@ namespace Reactor
 		{
 			while(m_run)
 			{
+				m_run=false;
 				Console.WriteLine("Task Connecting to {0}: ", m_uri.ToString());
 				try
 				{
 					m_connect_sock = new ClientWebSocket();
 					await m_connect_sock.ConnectAsync(m_uri, CancellationToken.None);
 					Console.WriteLine("Task Connected to {0}: ", m_uri.ToString());
+					iwsServiceHandler svc = 
+						m_service_handler_strategy.makeServiceHandler();
+					await svc.open(m_connect_sock);
 				}
 				catch(Exception ex)
 				{
-					Console.WriteLine("Exception {0}: ", ex);
+					Console.WriteLine("Connection failed: {0}", ex.Message);
+					// Async wait before re-trying
+					await Task.Delay(3000);
 				}
 				finally
 				{
-					Thread.Sleep(10);
+					//await Task.Delay(3000);
 					//await m_connect_sock.CloseAsync();
 					m_connect_sock.Dispose();
 				}
@@ -47,14 +53,14 @@ namespace Reactor
 			return m_run;
 		}
 
-      public int connect(string uri)
+      public async Task<int> connect(string uri)
       {
          m_uri = new Uri(uri);
 
-			Task t = Task.Factory.StartNew( async () =>
-			{
+			//Task t = Task.Factory.StartNew( async () =>
+			//{
 				await connect_task();
-			});
+			//});
 			return 0;
 		}
    }

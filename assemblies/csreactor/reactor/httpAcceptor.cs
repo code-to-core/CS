@@ -12,9 +12,9 @@ namespace Reactor
 		private string						m_prefix;
 		private HttpListener				m_http_listener; 
 
-		private iServiceHandlerFactory		m_service_handler_strategy;
+		private iwsServiceHandlerFactory		m_service_handler_strategy;
 
-		public httpAcceptor(iServiceHandlerFactory create_strategy)
+		public httpAcceptor(iwsServiceHandlerFactory create_strategy)
 		{
 			m_run = true;
 			m_service_handler_strategy=create_strategy;
@@ -60,6 +60,12 @@ namespace Reactor
 					WebSocketContext wsCtx = await ctx.AcceptWebSocketAsync(
 						subProtocol: null);
 					WebSocket ws = wsCtx.WebSocket;
+					iwsServiceHandler svc = m_service_handler_strategy.makeServiceHandler();
+					Task t = Task.Factory.StartNew( async () =>
+					{
+						await svc.open(ws);
+						Console.WriteLine("After Open()");
+					});
 				}
 				else
 				{

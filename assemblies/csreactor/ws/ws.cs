@@ -15,7 +15,7 @@ namespace Websocket
 		[STAThread]
 		static void Main(string[] args)
 		{
-			a = new httpAcceptor(new DefaultServiceHandlerFactory());
+			a = new httpAcceptor(new wsServiceHandlerFactory());
 
 			a.open("http://localhost:8001/demo/");
 
