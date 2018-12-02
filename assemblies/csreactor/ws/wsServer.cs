@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 using Reactor;
 
-namespace Websocket
+namespace wsServer
 {
-	class Websocket
+	class wsServer
 	{
-		static httpAcceptor a;
+		static wsAcceptor acceptor;
 
-		[STAThread]
 		static void Main(string[] args)
 		{
-			a = new httpAcceptor(new wsServiceHandlerFactory());
+			iwsServiceHandlerFactory app = new wsServerApp(args);
 
-			a.open("http://localhost:8001/demo/");
+			acceptor = new wsAcceptor(app);
 
-			a.accept();
+			acceptor.open("http://localhost:8001/demo/");
+
+			acceptor.accept();
 
 			//wait for shutdown
 			System.Threading.AutoResetEvent ev = new System.Threading.AutoResetEvent(false);

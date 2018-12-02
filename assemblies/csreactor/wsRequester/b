@@ -1,0 +1,2 @@
+ cat movers | dotnet run ws://40.122.109.9:8000/index > out
+

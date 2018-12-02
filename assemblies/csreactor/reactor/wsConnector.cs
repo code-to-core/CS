@@ -9,7 +9,7 @@ namespace Reactor
 {
    public class wsConnector
    {
-		bool											m_run;
+		int											m_run;
       public ClientWebSocket					m_connect_sock;
 
       Uri											m_uri;
@@ -18,28 +18,34 @@ namespace Reactor
 
       public wsConnector(iwsServiceHandlerFactory create_strategy)
       {
-			m_run = true;
-         m_service_handler_strategy=create_strategy;
+		  m_run =  0;
+	
+		  m_service_handler_strategy=create_strategy;
       }
 
-		private async Task<bool> connect_task()
+		private async Task<int> connect_task()
 		{
-			while(m_run)
+			while(m_run == 0)
 			{
-				m_run=false;
-				Console.WriteLine("Task Connecting to {0}: ", m_uri.ToString());
+				Console.Error.WriteLine("Task Connecting to {0}: ", m_uri.ToString());
+
+				var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
 				try
 				{
 					m_connect_sock = new ClientWebSocket();
-					await m_connect_sock.ConnectAsync(m_uri, CancellationToken.None);
-					Console.WriteLine("Task Connected to {0}: ", m_uri.ToString());
+				//	await m_connect_sock.ConnectAsync(m_uri, CancellationToken.None);
+					m_connect_sock.ConnectAsync(m_uri, cancellationTokenSource.Token).Wait(
+						cancellationTokenSource.Token);
+					
+					Console.Error.WriteLine("Task Connected to {0}: ", m_uri.ToString());
 					iwsServiceHandler svc = 
 						m_service_handler_strategy.makeServiceHandler();
-					await svc.open(m_connect_sock);
+					m_run = await svc.open(m_connect_sock);
 				}
 				catch(Exception ex)
 				{
-					Console.WriteLine("Connection failed: {0}", ex.Message);
+					Console.Error.WriteLine("Connection failed: {0}", ex.Message);
 					// Async wait before re-trying
 					await Task.Delay(3000);
 				}

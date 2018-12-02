@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Reactor;
 
 
-namespace wsServer
+namespace Responder
 {
 	public class wsServiceHandler : AsyncHandler, iwsServiceHandler
 	{
@@ -27,41 +27,35 @@ namespace wsServer
 		{
 			m_sock = sock;
 
+			MemoryStream ms = new MemoryStream();
 
 			byte [] buffer = new byte[128];
-			ArraySegment<Byte> segment = new ArraySegment<Byte>(buffer);
+
+
 			WebSocketReceiveResult result = null;
 
-			while(true)
+			bool keepGoing = true;
+			buffer = Encoding.ASCII.GetBytes("{ \"channel\": \"Index\" }");
+			//string line;
+			//while ((line = Console.ReadLine()) != null) 
+			ArraySegment<Byte> segment = new ArraySegment<Byte>(buffer);
+			await m_sock.SendAsync(buffer, 0, true, CancellationToken.None);
+			while (keepGoing == true)
 			{
-				MemoryStream ms = new MemoryStream();
+				//buffer = Encoding.ASCII.GetBytes(line);
+
 				do
 				{
-					try
-					{
-						result = await m_sock.ReceiveAsync(segment, CancellationToken.None);
-					}
-					catch (Exception ex)
-					{
-						Console.Error.WriteLine(ex.ToString());
-						break;
-					}
-					if(result.MessageType == WebSocketMessageType.Close)
-					{
-						Console.WriteLine("Received Close");
-						await m_sock.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by peer", CancellationToken.None);
-						break;
-					}
-
+					result = await m_sock.ReceiveAsync(segment, CancellationToken.None);
 					ms.Write(segment.Array, segment.Offset, result.Count);
 				}
 				while (!result.EndOfMessage);
 
 				ms.Seek(0, SeekOrigin.Begin);
 
-				await m_sock.SendAsync(ms.GetBuffer(), 0, true, CancellationToken.None);
+				//Console.WriteLine(Encoding.UTF8.GetString(ms.GetBuffer()));
 			}
-			return 0;
+			 return 0;
 		}
 	}
 }

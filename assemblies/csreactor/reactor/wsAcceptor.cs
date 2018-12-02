@@ -6,45 +6,33 @@ using System.Threading.Tasks;
 
 namespace Reactor
 {
-	public class httpAcceptor : AsyncHandler
+	public class wsAcceptor
 	{
-		private bool						m_run;
-		private string						m_prefix;
-		private HttpListener				m_http_listener; 
+		private bool							m_run;
+		private string							m_prefix;
+		private HttpListener					m_http_listener; 
 
 		private iwsServiceHandlerFactory		m_service_handler_strategy;
 
-		public httpAcceptor(iwsServiceHandlerFactory create_strategy)
+		public wsAcceptor(iwsServiceHandlerFactory create_strategy)
 		{
 			m_run = true;
 			m_service_handler_strategy=create_strategy;
 		}
 
-		public int open(string prefix)
+		public void open(string prefix)
 		{
 			if(!HttpListener.IsSupported)
-			{
-				Console.WriteLine("HttpListener not supported");
-			}
+				throw new ArgumentException("unsupported");
 
 			if(prefix == null)
 				throw new ArgumentException("prefixes");
 
 			m_prefix = new string(prefix);
+
 			m_http_listener = new HttpListener();
 			
 			m_http_listener.Prefixes.Add(prefix);
-			m_http_listener.Start();
-			 return 0;
-		}
-
-		private int handle_accept(SocketAsyncEventArgs e)
-		{
-			return 0;
-		}
-
-		private static void e_completed(object sender, SocketAsyncEventArgs e)
-		{
 		}
 
 		private async Task<bool> accept_task(int i)
@@ -64,7 +52,6 @@ namespace Reactor
 					Task t = Task.Factory.StartNew( async () =>
 					{
 						await svc.open(ws);
-						Console.WriteLine("After Open()");
 					});
 				}
 				else
@@ -79,6 +66,8 @@ namespace Reactor
 
 		public int accept()
 		{
+			m_http_listener.Start();
+
 			Parallel.For(1,10, async (i) =>
 			{
 				await accept_task(i);
