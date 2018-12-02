@@ -44,10 +44,18 @@ namespace Reactor
 				string ipAddress = ctx.Request.RemoteEndPoint.Address.ToString();
 				if (ctx.Request.IsWebSocketRequest)
 				{
-					Console.WriteLine("Websocket Request: IPAddress {0}", ipAddress);
-					WebSocketContext wsCtx = await ctx.AcceptWebSocketAsync(
-						subProtocol: null, new TimeSpan(0, 0, 10));
+					Console.Error.WriteLine(
+						"Websocket Request: IPAddress {0}", ipAddress);
+
+					HttpListenerWebSocketContext wsCtx = 
+						await ctx.AcceptWebSocketAsync(
+						subProtocol: null, keepAliveInterval: new TimeSpan(0, 0, 10));
+
 					WebSocket ws = wsCtx.WebSocket;
+					
+					Console.Error.WriteLine(WebSocket.DefaultKeepAliveInterval.ToString());
+
+
 					iwsServiceHandler svc = m_service_handler_strategy.makeServiceHandler();
 					Task t = Task.Factory.StartNew( async () =>
 					{

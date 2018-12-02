@@ -57,14 +57,32 @@ namespace wsClient
 					MemoryStream ms = new MemoryStream();
 					do
 					{
-						result = await m_sock.ReceiveAsync(segment, CancellationToken.None);
-						if(result.MessageType == WebSocketMessageType.Close)
+						try
 						{
-							Console.Error.WriteLine("Received Close");
-							await m_sock.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by peer", CancellationToken.None);
+							result = await m_sock.ReceiveAsync(
+								segment, CancellationToken.None);
+
+							if(result.MessageType == WebSocketMessageType.Close)
+							{
+								Console.Error.WriteLine("Received Close");
+								await m_sock.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by peer", CancellationToken.None);
+								break;
+							}
+							ms.Write(segment.Array, segment.Offset, result.Count);
+						}
+						catch(WebSocketException wsx)
+						{
+							Console.Error.WriteLine("WebSocket Error: {0}", wsx.WebSocketErrorCode);
+							keepGoing = false;
 							break;
 						}
-						ms.Write(segment.Array, segment.Offset, result.Count);
+						catch 
+						{
+							Console.Error.WriteLine("Unknown Exception");
+							keepGoing = false;
+							break;
+						}
+
 					}
 					while (!result.EndOfMessage);
 
@@ -74,7 +92,13 @@ namespace wsClient
 				Console.Error.WriteLine("Receiver ending");
 			}));
 
-			await Task.WhenAll(tasks.ToArray());
+			//await Task.WhenAll(tasks.ToArray());
+			while(tasks.Count > 0)
+			{
+				Task t = await Task.WhenAny(tasks.ToArray());
+				Console.Error.WriteLine("Task Exited");
+				tasks.Remove(t);
+			}
 			return 0;
 		}
 	}
