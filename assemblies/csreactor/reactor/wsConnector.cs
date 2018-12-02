@@ -27,18 +27,29 @@ namespace Reactor
 		{
 			while(m_run == 0)
 			{
-				Console.Error.WriteLine("Task Connecting to {0}: ", m_uri.ToString());
+				Console.Error.WriteLine(
+					"Task Connecting to {0}: ", m_uri.ToString());
 
-				var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+				var cancellationTokenSource = new CancellationTokenSource(
+					TimeSpan.FromSeconds(10));
 
 				try
 				{
 					m_connect_sock = new ClientWebSocket();
-				//	await m_connect_sock.ConnectAsync(m_uri, CancellationToken.None);
-					m_connect_sock.ConnectAsync(m_uri, cancellationTokenSource.Token).Wait(
-						cancellationTokenSource.Token);
+
+					ClientWebSocketOptions opt = m_connect_sock.Options;
+
+					Console.Error.WriteLine(opt.KeepAliveInterval.ToString());
+					opt.KeepAliveInterval = new TimeSpan(0, 0, 10);
+					Console.Error.WriteLine(opt.KeepAliveInterval.ToString());
+
+					m_connect_sock.ConnectAsync(
+						m_uri, cancellationTokenSource.Token).Wait(
+							cancellationTokenSource.Token);
 					
-					Console.Error.WriteLine("Task Connected to {0}: ", m_uri.ToString());
+					Console.Error.WriteLine(
+						"Task Connected to {0}: ", m_uri.ToString());
+
 					iwsServiceHandler svc = 
 						m_service_handler_strategy.makeServiceHandler();
 					m_run = await svc.open(m_connect_sock);

@@ -46,7 +46,7 @@ namespace Reactor
 				{
 					Console.WriteLine("Websocket Request: IPAddress {0}", ipAddress);
 					WebSocketContext wsCtx = await ctx.AcceptWebSocketAsync(
-						subProtocol: null);
+						subProtocol: null, new TimeSpan(0, 0, 10));
 					WebSocket ws = wsCtx.WebSocket;
 					iwsServiceHandler svc = m_service_handler_strategy.makeServiceHandler();
 					Task t = Task.Factory.StartNew( async () =>
